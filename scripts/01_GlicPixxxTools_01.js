@@ -11,6 +11,10 @@ const GLICPIXXXVER002ABI=[{"inputs":[],"stateMutability":"nonpayable","type":"co
 const ERC721HELPERADDRESS="0x12B7458c90616c68fCC37C74609313fD105771F8";
 const ERC721HELPERABI=[{"inputs":[{"internalType":"contract IERC721","name":"token","type":"address"},{"internalType":"uint256","name":"from","type":"uint256"},{"internalType":"uint256","name":"to","type":"uint256"}],"name":"owners","outputs":[{"internalType":"uint256[]","name":"_tokenIds","type":"uint256[]"},{"internalType":"address[]","name":"_owners","type":"address[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"contract IERC721","name":"token","type":"address"}],"name":"tokenInfo","outputs":[{"internalType":"string","name":"_symbol","type":"string"},{"internalType":"string","name":"_name","type":"string"},{"internalType":"uint256","name":"_totalSupply","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"contract IERC721","name":"token","type":"address"},{"internalType":"uint256","name":"from","type":"uint256"},{"internalType":"uint256","name":"to","type":"uint256"}],"name":"tokenURIs","outputs":[{"internalType":"uint256[]","name":"_tokenIds","type":"uint256[]"},{"internalType":"string[]","name":"_tokenURIs","type":"string[]"}],"stateMutability":"view","type":"function"}];
 
+const ALLGLICPIXXXVER002API = "https://api.glicpixxx.love/ver002/all";
+
+const CACHEDIRECTORY = "./cache/";
+
 console.log();
 
 var argv = yargs(process.argv.slice(2))
@@ -23,6 +27,14 @@ var argv = yargs(process.argv.slice(2))
       doSomething,
       handler(argv) {
         info(argv);
+      }
+    })
+    .command({
+      command: 'apidata',
+      describe: 'Download API data',
+      doSomething,
+      handler(argv) {
+        console.log("apidata");
       }
     })
     .command({
@@ -50,6 +62,7 @@ var argv = yargs(process.argv.slice(2))
     .nargs('f', 1)
     .describe('f', 'Load a file')
     // .demandOption(['f'])
+    .demandCommand(1, '').recommendCommands().strict()
     .help('h')
     .alias('h', 'help')
     .epilog('(c) BokkyPooBah / Bok Consulting Pty Ltd - Sep 2021. The MIT Licence')
@@ -100,7 +113,6 @@ var argv = yargs(process.argv.slice(2))
 // }
 // doit();
 
-console.log("\n" + process.cwd());
 
 function doSomething(argv) {
   console.log("doSomething: " + JSON.stringify(argv));
@@ -108,8 +120,12 @@ function doSomething(argv) {
 }
 
 function info(argv) {
-  // console.log("info: " + JSON.stringify(argv));
-  console.log("Contract: https://etherscan.io/address/0x1c60841b70821dca733c9b1a26dbe1a33338bd43#code");
-  console.log("Symbol  : GLICPIXXXVER002");
-  console.log("Name    : GLICPIXXXVER002 - GRAND COLLECTION");
+  console.log("Current working directory: " + process.cwd());
+  console.log("Cache directory          : " + CACHEDIRECTORY);
+  console.log("Contract                 : https://etherscan.io/address/0x1c60841b70821dca733c9b1a26dbe1a33338bd43#code");
+  console.log("Symbol                   : GLICPIXXXVER002");
+  console.log("Name                     : GLICPIXXXVER002 - GRAND COLLECTION");
+  console.log("OpenSea URL              : https://opensea.io/collection/glicpixxxver002");
+  console.log("All GLICPIXXXVER002 API  : " + ALLGLICPIXXXVER002API);
+  console.log();
 }

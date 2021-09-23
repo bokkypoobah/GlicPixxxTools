@@ -1,0 +1,9 @@
+
+Current working directory: /Users/bok/Projects/GlicPixxxTools/scripts
+Cache directory          : ./cache/
+Contract                 : https://etherscan.io/address/0x1c60841b70821dca733c9b1a26dbe1a33338bd43#code
+Symbol                   : GLICPIXXXVER002
+Name                     : GLICPIXXXVER002 - GRAND COLLECTION
+OpenSea URL              : https://opensea.io/collection/glicpixxxver002
+All GLICPIXXXVER002 API  : https://api.glicpixxx.love/ver002/all
+
