@@ -48,13 +48,13 @@ var argv = yargs(process.argv.slice(2))
       }
     })
     .command({
-      command: 'apidata',
+      command: 'getapidata',
       describe: 'Download API data',
       doSomething,
       async handler(argv) {
-        console.log("apidata");
+        console.log("getapidata");
         try {
-          downloadFile(ALLGLICPIXXXVER002API, CACHEALLJSON);
+          downloadFile(ALLGLICPIXXXVER002API, CACHEDIRECTORY + CACHEALLJSON);
         } catch (e) {
           console.error("Error downloading: " + ALLGLICPIXXXVER002API);
         }
@@ -157,7 +157,7 @@ function info(argv) {
     if (fs.existsSync(CACHEDIRECTORY + cache)) {
       try {
         const stats = fs.statSync(CACHEDIRECTORY + cache);
-        status = "Last modified: " + stats.mtime.toLocaleString();
+        status = "Last modified: " + stats.mtime.toUTCString();
       } catch (error) {
         status = "Error";
         console.log(error);
@@ -167,10 +167,5 @@ function info(argv) {
     }
     console.log("Cached " + padRight(cache, 17) + " : " + CACHEDIRECTORY + padRight(cache, 17)  + " - " + status);
   }
-  // const CACHEALLJSON = CACHEDIRECTORY + "all.json";
-  // const CACHEGPOWNERSJSON = CACHEDIRECTORY + "gpowners.json";
-  // const CACHEGPENSJSON = CACHEDIRECTORY + "gpens.json";
-
-  // console.log("Cached all.json          : " + CACHEALLJSON + " - " + allJSONStatus);
   console.log();
 }
