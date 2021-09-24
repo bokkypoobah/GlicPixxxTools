@@ -6,4 +6,7 @@ Symbol                   : GLICPIXXXVER002
 Name                     : GLICPIXXXVER002 - GRAND COLLECTION
 OpenSea URL              : https://opensea.io/collection/glicpixxxver002
 All GLICPIXXXVER002 API  : https://api.glicpixxx.love/ver002/all
+Cached all.json          : ./cache/all.json          - Last modified: 9/23/2021, 9:59:32 PM
+Cached gpowners.json     : ./cache/gpowners.json     - Last modified: 9/24/2021, 7:04:42 AM
+Cached gpens.json        : ./cache/gpens.json        - Last modified: 9/24/2021, 7:05:09 AM
 

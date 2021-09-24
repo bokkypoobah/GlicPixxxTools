@@ -1,6 +1,9 @@
 #!/usr/bin/env node
 
-import yargs  from "yargs";
+import yargs from "yargs";
+import fs from "fs";
+import util from "util";
+import fetch from "node-fetch";
 
 const ENSREVERSERECORDSADDRESS="0x3671aE578E63FdF66ad4F3E12CC0c0d71Ac7510C";
 const ENSREVERSERECORDSABI=[{"inputs":[{"internalType":"contract ENS","name":"_ens","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"address[]","name":"addresses","type":"address[]"}],"name":"getNames","outputs":[{"internalType":"string[]","name":"r","type":"string[]"}],"stateMutability":"view","type":"function"}];
@@ -14,8 +17,23 @@ const ERC721HELPERABI=[{"inputs":[{"internalType":"contract IERC721","name":"tok
 const ALLGLICPIXXXVER002API = "https://api.glicpixxx.love/ver002/all";
 
 const CACHEDIRECTORY = "./cache/";
+const CACHEALLJSON = "all.json";
+const CACHEGPOWNERSJSON = "gpowners.json";
+const CACHEGPENSJSON = "gpens.json";
 
 console.log();
+
+const downloadFile = (async (url, path) => {
+  console.log("downloadFile: " + url + ", " + path);
+  const res = await fetch(url, { timeout: 15000 });
+  const fileStream = fs.createWriteStream(path);
+  await new Promise((resolve, reject) => {
+    res.body.pipe(fileStream);
+    res.body.on("error", reject);
+    fileStream.on("finish", resolve);
+  });
+});
+
 
 var argv = yargs(process.argv.slice(2))
     .version('0.9.0')
@@ -33,8 +51,13 @@ var argv = yargs(process.argv.slice(2))
       command: 'apidata',
       describe: 'Download API data',
       doSomething,
-      handler(argv) {
+      async handler(argv) {
         console.log("apidata");
+        try {
+          downloadFile(ALLGLICPIXXXVER002API, CACHEALLJSON);
+        } catch (e) {
+          console.error("Error downloading: " + ALLGLICPIXXXVER002API);
+        }
       }
     })
     .command({
@@ -70,10 +93,6 @@ var argv = yargs(process.argv.slice(2))
 
 // console.log("Args are", argv);
 
-// import fs from 'fs';
-// import util from 'util';
-// import fetch from 'node-fetch';
-// import yargs from 'yargs';
 //
 //
 
@@ -81,16 +100,6 @@ var argv = yargs(process.argv.slice(2))
 // const util = require('util');
 // const fetch = require('node-fetch');
 // const BASTARDDATA = require('./bastardData.js');
-
-// const downloadFile = (async (url, path) => {
-//   const res = await fetch(url, { timeout: 15000 });
-//   const fileStream = fs.createWriteStream(path);
-//   await new Promise((resolve, reject) => {
-//     res.body.pipe(fileStream);
-//     res.body.on("error", reject);
-//     fileStream.on("finish", resolve);
-//   });
-// });
 
 // console.log(JSON.stringify(BASTARDDATA.BASTARDDATA["0"]));
 
@@ -119,6 +128,21 @@ function doSomething(argv) {
   console.log("https://etherscan.io/address/0x1c60841b70821dca733c9b1a26dbe1a33338bd43#code");
 }
 
+function padLeft(s, n) {
+  var o = s.toString();
+  while (o.length < n) {
+    o = " " + o;
+  }
+  return o;
+}
+function padRight(s, n) {
+  var o = s;
+  while (o.length < n) {
+    o = o + " ";
+  }
+  return o;
+}
+
 function info(argv) {
   console.log("Current working directory: " + process.cwd());
   console.log("Cache directory          : " + CACHEDIRECTORY);
@@ -127,5 +151,26 @@ function info(argv) {
   console.log("Name                     : GLICPIXXXVER002 - GRAND COLLECTION");
   console.log("OpenSea URL              : https://opensea.io/collection/glicpixxxver002");
   console.log("All GLICPIXXXVER002 API  : " + ALLGLICPIXXXVER002API);
+
+  for (const cache of [CACHEALLJSON, CACHEGPOWNERSJSON, CACHEGPENSJSON]) {
+    let status;
+    if (fs.existsSync(CACHEDIRECTORY + cache)) {
+      try {
+        const stats = fs.statSync(CACHEDIRECTORY + cache);
+        status = "Last modified: " + stats.mtime.toLocaleString();
+      } catch (error) {
+        status = "Error";
+        console.log(error);
+      }
+    } else {
+      status = "Not found";
+    }
+    console.log("Cached " + padRight(cache, 17) + " : " + CACHEDIRECTORY + padRight(cache, 17)  + " - " + status);
+  }
+  // const CACHEALLJSON = CACHEDIRECTORY + "all.json";
+  // const CACHEGPOWNERSJSON = CACHEDIRECTORY + "gpowners.json";
+  // const CACHEGPENSJSON = CACHEDIRECTORY + "gpens.json";
+
+  // console.log("Cached all.json          : " + CACHEALLJSON + " - " + allJSONStatus);
   console.log();
 }
